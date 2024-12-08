@@ -8,9 +8,15 @@ import time
 from datetime import datetime, timedelta
 import socket
 import psutil
+import os
 
-# Reset the start time each time the app runs
-st.session_state.start_time = time.time()
+# Set the total runtime start time if not already set
+if "total_start_time" not in st.session_state:
+    # Use a fixed reference time for total runtime tracking
+    st.session_state.total_start_time = time.time()
+
+# Set the restart start time (resets every time the app starts)
+st.session_state.restart_start_time = time.time()
 
 # Get current timezone
 current_timezone = datetime.now().astimezone().tzinfo
@@ -35,9 +41,12 @@ def format_runtime(seconds):
 
 # Function to update clocks
 def update_clocks():
-    elapsed_seconds = time.time() - st.session_state.start_time
-    st.session_state.runtime = format_runtime(elapsed_seconds)
+    total_elapsed_seconds = time.time() - st.session_state.total_start_time
+    restart_elapsed_seconds = time.time() - st.session_state.restart_start_time
+    st.session_state.total_runtime = format_runtime(total_elapsed_seconds)
+    st.session_state.restart_runtime = format_runtime(restart_elapsed_seconds)
     st.session_state.current_time = datetime.now().strftime("%I:%M:%S %p")  # Current time in AM/PM format
+    st.session_state.current_date = datetime.now().strftime("%Y-%m-%d")  # Current date
 
 # Periodically update clocks
 update_interval = 1  # seconds
@@ -55,8 +64,17 @@ st.markdown("""
         border-radius: 5px;
         margin-bottom: 10px;
     }
-    .runtime-clock-bar {
+    .total-runtime-bar {
         background-color: #fffacd;
+        color: #000;
+        font-size: 20px;
+        text-align: center;
+        padding: 5px 0;
+        border-radius: 5px;
+        margin-bottom: 10px;
+    }
+    .restart-runtime-bar {
+        background-color: #d4edda;
         color: #000;
         font-size: 20px;
         text-align: center;
@@ -75,7 +93,8 @@ st.markdown("""
 
 # Containers for the clocks
 current_time_container = st.empty()
-runtime_clock_container = st.empty()
+total_runtime_container = st.empty()
+restart_runtime_container = st.empty()
 ipv4_table_container = st.empty()
 
 # Display IPv4 addresses in a table
@@ -94,19 +113,25 @@ st.markdown(
 # Main loop to update clocks
 while True:
     update_clocks()
-    # Display current time with description and timezone
+    # Display current date and time with description and timezone
     current_time_container.markdown(
         f'''
         <div class="current-time-bar">
+            Current Date: {st.session_state.current_date} <br>
             Current Time: {st.session_state.current_time} <br>
             Timezone: {current_timezone}
         </div>
         ''',
         unsafe_allow_html=True,
     )
-    # Display runtime clock with description in a styled bar
-    runtime_clock_container.markdown(
-        f'<div class="runtime-clock-bar">Runtime: {st.session_state.runtime}</div>',
+    # Display total runtime clock with description in a styled bar
+    total_runtime_container.markdown(
+        f'<div class="total-runtime-bar">Total Runtime: {st.session_state.total_runtime}</div>',
+        unsafe_allow_html=True,
+    )
+    # Display restart runtime clock with description in a styled bar
+    restart_runtime_container.markdown(
+        f'<div class="restart-runtime-bar">Restart Runtime: {st.session_state.restart_runtime}</div>',
         unsafe_allow_html=True,
     )
     time.sleep(update_interval)
