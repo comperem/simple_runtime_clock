@@ -15,7 +15,7 @@ The table also shows a table of server or host IPv4 addresses so you know where 
 <img align="center" src="screenshot.png" alt="screenshot of simple timer">
 
 ### Author:
-
+***
     Marc Compere, comperem at erau.edu
     created : 08 Dec 2024
     modified: 08 Dec 2024
