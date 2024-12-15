@@ -6,8 +6,13 @@ The table also shows a table of server or host IPv4 addresses so you know where 
 
 ### Dependencies:
 - <code>psutil</code>
+- <code>flask</code>
 - <code>streamlit</code>
 
+
+## Install with:
+
+    uv pip install -r requirements.txt
 
 ## Run with:
     
@@ -22,7 +27,7 @@ The table also shows a table of server or host IPv4 addresses so you know where 
 
     Marc Compere, comperem at erau.edu
     created : 08 Dec 2024
-    modified: 08 Dec 2024
+    modified: 14 Dec 2024
 
 
 

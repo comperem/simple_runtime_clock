@@ -3,10 +3,11 @@ import sys
 
 # Define the server and port
 UDP_IP = "127.0.0.1"  # Use the IP of your Streamlit server if not running locally
+#UDP_IP = "10.12.77.69"
 UDP_PORT = 5000
 
 
-def send_udp_message(message, target_ip='127.0.0.1', target_port=5000):
+def send_udp_message(message, target_ip=UDP_IP, target_port=UDP_PORT):
     """Send a UDP message to the specified IP and port."""
     udp_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     nBytes=udp_socket.sendto(message.encode('utf-8'), (target_ip, target_port))
