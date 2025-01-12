@@ -66,6 +66,8 @@ if 'event' not in st.session_state:
 if 'counter' not in st.session_state:
 	st.session_state.counter = 0
 
+if "port_input" not in st.session_state:
+    st.session_state.port_input = 8080
 
 # Set the restart start time (resets every time the app starts)
 st.session_state.restart_start_time = time.time()
@@ -257,7 +259,7 @@ def websocket_server_thread(eStop, host, port):
     except OSError as err:
         print(f"Failed to start server: {err}")
 
-def start_websocket_server(eStop, host='localhost', port=8000):
+def start_websocket_server(eStop, host, port):
     """
     Start the WebSocket server in a separate process, ensuring no previous server is running on the port.
     """
@@ -295,8 +297,11 @@ def stop_websocket_server(ws_thread):
 # ------------- websocket runtime -------------
 
 # Start WebSocket server in a separate thread
-host = ''
-port = 8765  # Explicitly define the port we want to use
+host = 'localhost'
+host = '0.0.0.0' # listen from anyone
+#port = 8765  # Explicitly define the port we want to use
+#port = 8080
+port = int(st.session_state.port_input)
 
 col1, col2, col3 = st.columns(3)
 
@@ -313,6 +318,12 @@ if ws_server_stop:
     print(f"eStop.is_set()={st.session_state.eStop.is_set()}")
     stop_websocket_server( st.session_state.ws_thread ) # STOP websocket interface
 
+# Third row for integer input
+port_input = col3.text_input("server port:", value=st.session_state.port_input)
+print(f'integer_input={port_input}')
+
+# Update session state from input
+st.session_state.port_input = port_input
 
 
 

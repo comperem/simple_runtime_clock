@@ -13,6 +13,13 @@
 import websocket
 import threading
 
+ip='localhost'
+#ip='10.12.249.231'  # websocket server
+#ip="simple-runtime-clock-with-websocket-d.streamlit.app"
+port=8765           # websocket port
+port=8081
+
+
 def on_message(ws, message):
     print(f"Debug: on_message called with message: {message}")
     print(f"Server message received: {message}")
@@ -27,7 +34,8 @@ def on_open(ws):
     print("### opened ###")
 
 def connect():
-    ws = websocket.WebSocketApp("ws://localhost:8765",
+    print(f'attempting websocket connection on [{ip}:{port}]')
+    ws = websocket.WebSocketApp("ws://{0}:{1}".format(ip,port),
                                 on_open=on_open,
                                 on_message=on_message,
                                 on_error=on_error,
