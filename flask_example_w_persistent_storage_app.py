@@ -6,7 +6,7 @@
 # send in get requests on 8502 with: curl "http://localhost:8502/?param1=test&param2=example"
 #
 # browser in streamlit on 8501 displays parameters passed in via command line
-# WORKS LOCALLY
+# WORKS LOCALLY BUT FLASK IS NOT SUPPORTED ON STREAMLIT COMMUNITY CLOUD
 # mdc, 15 Dec 2024
 
 import threading
